@@ -5,16 +5,20 @@ import abi from './utils/sardaukarchant.json';
 // abi(Application Binary Interface) instruction found in README.md
 
 const App = () => {
+  /*
+  * A state variable used to store the user's public wallet address
+  */
   const [currentAccount, setCurrentAccount] = useState("");
   /**
-   * Create a varaible here that holds the contract address after you deploy!
+   * All state property to store all waves
+   * `contractAddress` is retrieved from user's terminal output after deployment to Rinkeby Testnet
    */
   const [allWaves, setAllWaves] = useState([]);
   const contractAddress = "0x53E47439455BaA44eE92E8172AB7aE677613BA06";
   const contractABI = abi.abi;
 
   /*
-   * Create a method that gets all waves from your contract
+   * `getAllWaves` will retrieve all CHANTS from our contract
    */
   const getAllWaves = async () => {
   const { ethereum } = window;
@@ -24,8 +28,10 @@ const App = () => {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
       const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+      // `waves` will call `getAllWaves` method from our Smart Contract
       const waves = await wavePortalContract.getAllWaves();
 
+      // address, timestamp, & message are all that is needed for this UI
       const wavesCleaned = waves.map(wave => {
         return {
           address: wave.waver,
@@ -33,7 +39,7 @@ const App = () => {
           message: wave.message,
         };
       });
-
+      // `setAllWaves` will store data within React State
       setAllWaves(wavesCleaned);
     } else {
       console.log("Ethereum object doesn't exist!");
@@ -44,7 +50,10 @@ const App = () => {
 };
 
 /**
- * Listen in for emitter events!
+ * We listen for the `emit`s of `event`s
+ * `NewWave` functions similar to a webhook
+ * `setAllWaves` will ensure the user's msg is automatically appended to the `allWaves` Array when the event is
+ * received. The UI will update to reflect such.
  */
 useEffect(() => {
   let wavePortalContract;
@@ -76,6 +85,9 @@ useEffect(() => {
   };
 }, []);
   
+  /*
+  * We ensure we have access to `window.ethereum`
+  */
   const checkIfWalletIsConnected = async () => {
     try {
       const { ethereum } = window;
@@ -87,6 +99,9 @@ useEffect(() => {
         console.log("We have the ethereum object", ethereum);
       }
 
+      /*
+      * `accounts` will check whether we are authorized to access the user's wallet
+      */
       const accounts = await ethereum.request({ method: 'eth_accounts' });
 
       if (accounts.length !== 0) {
@@ -102,6 +117,9 @@ useEffect(() => {
     }
   }
 
+  /*
+  * Function to connect to user's wallet
+  */
   const connectWallet = async () => {
     try {
       const { ethereum } = window;
@@ -125,6 +143,18 @@ useEffect(() => {
       const { ethereum } = window;
 
       if (ethereum) {
+        /*
+        * The `ethers` library helps the frontend talk to our contract.
+        `providers` permit communication with Ethereum nodes.
+        
+        A `Signer` in `ethers` is an abstraction of an ETH account used to sign
+        messages & Txns + send Txns to the Ethereum Network to execute state changing operations.
+
+        `contractABI` is used here
+
+        `waveTxn` is the actual CHANT from our smart contract
+
+        */
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
@@ -133,6 +163,7 @@ useEffect(() => {
         console.log("Retrieved total wave count...", count.toNumber());
 
         const waveTxn = await wavePortalContract.wave("CHANT FOR THE MAKER", { gasLimit: 300000 });
+        // with `gasLimit` we force the user to pay 300K gas, if all is not used it is refunded
         console.log("Mining...", waveTxn.hash);
 
         await waveTxn.wait();
@@ -148,10 +179,14 @@ useEffect(() => {
     }
   }
 
+  /*
+  * `useEffect()` runs our function `checkIfWalletIsConnected` when the page loads
+  */
   useEffect(() => {
     checkIfWalletIsConnected();
   }, [])
   
+  // HTML Code //
   return (
     <div className="mainContainer">
       <div className="dataContainer">
@@ -173,6 +208,7 @@ useEffect(() => {
           </button>
         )}
 
+        {/* `allWaves.map` will render our UI data for viewing */}
         {allWaves.map((wave, index) => {
           return (
             <div key={index} style={{ backgroundColor: "OldLace", marginTop: "16px", padding: "8px" }}>
