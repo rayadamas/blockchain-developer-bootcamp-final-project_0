@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import './App.css';
 import abi from './utils/sardaukarchant.json';
+// abi(Application Binary Interface) instruction found in README.md
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
