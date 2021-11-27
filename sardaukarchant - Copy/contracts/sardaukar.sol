@@ -7,6 +7,7 @@ pragma solidity ^0.8.0;// Version may need to be specified depending on local en
 /// @notice This contract's primary use is a basic simulation
 /// @dev All function calls cause no side effects
 
+/// @inheritenv We inherit use of the Hardhat dev environment
 import "hardhat/console.sol";
 
 contract WavePortal {
@@ -51,6 +52,7 @@ contract WavePortal {
         /// `_message` is what the user sends from the frontend.
         require(
             /// @notice msg.sender is the address of the function caller
+            /// This ensures the contract cannot be spammed by an EOA
             lastWavedAt[msg.sender] + 15 seconds < block.timestamp,
             "Wait 15s"
         );
@@ -95,11 +97,14 @@ contract WavePortal {
         emit NewWave(msg.sender, block.timestamp, _message);
     }
 
+    /// @notice `getAllWaves` will be called asynchronously from front-end `App.js` script
+    /// @return works to retrieve all the current CHANTS gathered from this contract
     function getAllWaves() public view returns (Wave[] memory) {
         return waves;
     }
 
     /// @notice Retrieves total number of CHANTS
+    /// @return Returns the total amount of CHANTS once retrieved by `getAllWaves`
     function getTotalWaves() public view returns (uint256) {
         return totalWaves;
     }
