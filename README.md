@@ -7,7 +7,7 @@ https://sardaukarchant-foldinside-replitf-old.vercel.app/ - Pointing @ `TESTNET 
 https://rinkeby.etherscan.io/address/0x53e47439455baa44ee92e8172ab7ae677613ba06
 
 **Screencast**
-
+https://www.loom.com/share/6a73d5a8b4e34ffcada208ddfc006f88?sharedAppSource=personal_library
 
 
 
