@@ -112,3 +112,6 @@ Any changes to LOCAL contracts' code will need to be re-tested, then re-deployed
 - `yourSampleProj address:  0xBLAHBLAHBLAH50763`
 3. Update the ABI file on our Replit frontend
 - Locate the ABI code in your LOCAL code env via this path: `artifacts/contracts/yourSampleProj.sol/yourSampleProj.json`, then copy said code and paste said code under such path on Replit under this path: `./src/utils/sardaukarchant.json` 
+---
+**Screencast**
+https://www.loom.com/share/6a73d5a8b4e34ffcada208ddfc006f88?sharedAppSource=personal_library
