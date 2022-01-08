@@ -106,7 +106,7 @@ PRIVATE_KEY=;
 _RECORD WHAT IS OUTPUT TO YOUR TERMINAL_
 (Note)
 Any changes to LOCAL contracts' code will need to be re-tested, then re-deployed. 
-1. Deploy your scrpt again
+1. Deploy your script again
 2. Update the contract address on your Replit frontend
 - Once re-deployed you must take the NEW contract address output to your terminal & add it to your `app.js` code via Replit under `const contractAddress`
 - `yourSampleProj address:  0xBLAHBLAHBLAH50763`
